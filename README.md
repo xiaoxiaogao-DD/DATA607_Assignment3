@@ -1,4 +1,4 @@
-#MSDS Spring 2018 
-##DATA 607 Data Aquisition and Management
-####Jiadi Li
+#MSDS Spring 2018 <br/><br/>
+##DATA 607 Data Aquisition and Management<br/><br/><br/><br/>
+####Jiadi Li<br/><br/>
 ####Week 3 Assignment:R Character Manipulation and Date Processing
