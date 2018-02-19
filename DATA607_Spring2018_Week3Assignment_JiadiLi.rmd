@@ -1,0 +1,82 @@
+#MSDS Spring 2018 
+##DATA 607 Data Aquisition and Management
+####Jiadi Li
+####Week 3 Assignment:R Character Manipulation and Date Processing
+
+Chapter 8
+3.Copy the introductory example. The vector name stores the extracted names.
+```{r}
+raw.data <-"555-1239Moe Szyslak(636) 555-0113Burns, C. Montgomery555-6542Rev. Timothy Lovejoy555 8904Ned Flanders636-555-3226Simpson, Homer5553642Dr. Julius Hibbert"
+
+library(stringr)
+name <- unlist(str_extract_all(raw.data,"[[:alpha:]., ]{2,}"))
+name
+```
+
+(a) Use the tools of this chapter to rearrange the vector so that all elements conform to the standard first_name last_name.
+```{r}
+for (i in 1:length(name)) {
+  if (str_detect(name[i],",")) {
+    name_replace <- unlist(str_split(name[i],","))
+    name[i] <- str_c(name_replace[2]," ",name_replace[1])
+  }
+}
+name
+```
+
+(b) Construct a logical vector indicating whether a character has a title (i.e.,Rev. and Dr.).
+```{r}
+title_list <- unlist(str_extract_all(name,"^[:alpha:]{2,}\\. "))
+str_detect(name,title_list)
+```
+
+(c) Construct a logical vector indicating whether a character has a second name.
+```{r}
+second_name <- unlist(str_extract_all(name,"[:print:]? [:alpha:]\\. "))
+str_detect(name,second_name)
+```
+
+4.Describe the types of strings that conform to the following regular expressions and construct an example that is matched by the regular expression.<br/>
+(a) [0-9]+\\$  
+one or more digits followed by a dollar sign  
+```{r}
+example_a <- c("37281394$","5$")
+str_detect(example_a,"[0-9]+\\$")
+```
+
+(b) \\b[a-z]{1,4}\\b  
+one to four lower case letters only with nothing at the front or back
+```{r}
+example_b <- c("agd","enjs")
+str_detect(example_b,"\\b[a-z]{1,4}\\b")
+```
+
+(c) .*?\\.txt$  
+any number of any character followed by ".txt"
+```{r}
+example_c <- c("dswer.txt","e.txt",".txt")
+str_detect(example_c,".*?\\.txt$")
+```
+
+(d) \\d{2}/\\d{2}/\\d{4}  
+two digits followed by "/" followed by two digits followed by "/" followed by four digits. Normally used to show dates.
+```{r}
+example_d <- c("02/18/2018","10/15/1993")
+str_detect(example_d,"\\d{2}/\\d{2}/\\d{4}")
+```
+
+(e) <(.+?)>.+?</\\1>  
+any number of character within "< >" followed by any number of any character followed by any character (exactly same as the first group of character in < >) within "</>" 
+```{r}
+example_e <- c("<hello>world</hello>")
+str_detect(example_e,"<(.+?)>.+?</\\1>")
+```
+
+9.The following code hides a secret message. Crack it with R and regular expressions.
+Hint: Some of the characters are more revealing than others! The code snippet is also available in the materials at www.r-datacollection.com.
+
+```{r}
+raw.data <- "clcopCow1zmstc0d87wnkig7OvdicpNuggvhryn92Gjuwczi8hqrfpRxs5Aj5dwpn0TanwoUwisdij7Lj8kpf03AT5Idr3coc0bt7yczjatOaootj55t3Nj3ne6c4Sfek.r1w1YwwojigOd6vrfUrbz2.2bkAnbhzgv4R9i05zEcrop.wAgnb.SqoU65fPa1otfb7wEm24k6t3sR9zqe5fy89n6Nd5t9kc4fE905gmc4Rgxo5nhDk!gr"
+code <- str_replace_all(str_replace_all(raw.data,"[:lower:]?[:digit:]?",""),"\\."," ")
+code
+```
